@@ -5,7 +5,7 @@ def get_matrix(n, m, value):
         matrix.append(enlist)
         for j in range (m):
             enlist.append(value)
-    print (matrix)
+    return matrix
 
 result1 = get_matrix(2, 2, 10)
 result2 = get_matrix(3, 5, 42)
