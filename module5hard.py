@@ -6,6 +6,32 @@ class User:
         self.password = hash(password)
         self.age = age
 
+    def __str__(self):
+        return self.nickname
+
+    def __repr__(self):
+        return self.nickname
+
+    def __eq__(self, other):
+        if other == None:
+            return False
+        if type(other) == str:
+            return self.nickname == other
+        if isinstance(other, int):
+            return self.password == other
+
+    def __ne__(self, other):
+        if other == None:
+            return True
+        if isinstance(other, str):
+            return self.nickname != other
+        if type(other) is int:
+            return self.password != other
+
+   # def __contains__(self, item):
+   #     return item == self.nickname
+
+
 class Video:
     def __init__(self, title, duration, time_now = 0, adult_mode = False):
         self.title = title
@@ -13,54 +39,66 @@ class Video:
         self.time_now = time_now
         self.adult_mode = adult_mode
 
+    def __repr__(self):
+        return self.title
+
+    def __ne__(self, other):
+        if isinstance(other, str):
+            return other != self.title
+
+    def __eq__(self, other):
+        if isinstance(other, str):
+            return other == self.title
+
 class UrTube:
     def __init__(self):
-        self.users = {}
-        self.videos = {}
         self.current_user = None
+
+    users = []
+    videos = []
 
     def register(self, nickname, password, age):
         if nickname not in self.users:
-            self.users[nickname] = User(nickname, password, age)
+            self.users.append( User(nickname, password, age) )
             self.log_in(nickname, password)
         else:
             print(f"Пользователь {nickname} уже существует")
 
     def log_in(self, nickname, password):
-        if nickname in self.users:
-            if self.users[nickname].password == hash(password):
-                self.current_user = nickname
+        for i in self.users:
+            if nickname == i.nickname and i.password == hash(password):
+                self.current_user = i
+        if nickname not in self.users:
+            print('Пользователь остутствует, пройдите регистрацию.')
 
     def log_out(self):
         self.current_user = None
 
     def add(self, *videos):
         for i in videos:
-            if i in self.videos:
-                return
-        for i in videos:
-            self.videos[i.title] = i
+            if i not in self.videos:
+                self.videos.append(i)
 
     def get_videos(self, sword):
         result = []
         for i in self.videos:
-            if sword.casefold() in i.casefold():
+            if sword.casefold() in i.title.casefold():
                 result.append(i)
         return result
 
     def watch_video(self, video):
         if self.current_user != None:
-            if video in self.videos:
-
-                if self.videos[video].adult_mode == False or self.users[self.current_user].age >= 18:
-                    for i in range(self.videos[video].duration):
-                        time.sleep(1)
-                        self.videos[video].time_now += 1
-                        print(self.videos[video].time_now)
-                    self.videos[video].time_now = 0
-                    print("Конец видео")
-                else:
-                    print("Вам нет 18 лет, пожалуйста покиньте страницу")
+            for n in self.videos:
+                if n == video:
+                    if n.adult_mode == False or self.current_user.age >= 18:
+                        for i in range(n.duration):
+                            time.sleep(1)
+                            n.time_now += 1
+                            print(n.time_now)
+                        n.time_now = 0
+                        print("Конец видео")
+                    else:
+                        print("Вам нет 18 лет, пожалуйста покиньте страницу")
 
         else:
             print("Войдите в аккаунт, чтобы смотреть видео")
