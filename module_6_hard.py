@@ -55,7 +55,7 @@ class Circle(Figure):
         super().__init__(color, sides)
         self.__radius = len(self)/6.28
         if len(self.get_sides()) != self.sides_count:
-            self.__sides = (1)
+            self.set_sides = (1)
 
     def get_square(self):
         return (self.__radius*3.14)**2
@@ -65,25 +65,28 @@ class Triangle(Figure):
     def __init__(self, color, sides):
         super().__init__(color, sides)
         if len(self.get_sides()) != self.sides_count:
-            self.__sides = (1, 1, 1)
+            self.set_sides = (1, 1, 1)
 
     def get_square(self):
         hp = len(self)//2
-        a = self.sides([0])
-        b = self.sides([1])
-        c = self.sides([2])
+        a = self.get_sides([0])
+        b = self.get_sides([1])
+        c = self.get_sides([2])
         return round((hp*(hp-a)*(hp-b)*(hp-c))**0.5)
 
 class Cube(Figure):
     sides_count = 12
     def __init__(self, color, sides):
         super().__init__(color, sides)
-        if len(self.get_sides()) != 1:
-            self.__sides = (1)
         cs = []
-        for i in range(12):
-            cs.append(sides)
-        self.set_sides(*cs)
+        if len(self.get_sides()) != 1:
+            for i in range(12):
+                cs.append(1)
+            self.set_sides(*cs)
+        else:
+            for i in range(12):
+                cs.append(sides)
+            self.set_sides(*cs)
 
     def get_volume(self):
         return self.get_sides()[0]**3
