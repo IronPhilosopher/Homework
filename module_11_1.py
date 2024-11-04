@@ -27,6 +27,11 @@ plt.show()
 
 import requests as r
 
-r1 = r.options('https://urban-university.ru/profile/courses')
+r1 = r.options('https://github.com/IronPhilosopher/Homework')
+r2 = r.delete('https://github.com/IronPhilosopher/Homework')
+r3 = r.get('https://github.com/IronPhilosopher/Homework')
 print(r1.text)
+print(r2.text)
+print(r3.history)
+print(r3.status_code)
 
