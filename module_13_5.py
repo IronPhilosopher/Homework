@@ -37,25 +37,37 @@ async def set_age(message):
 
 @dp.message_handler(state=UserState.age)
 async def set_growth(message, state):
-    await state.update_data(age=int(message.text))
-    await message.answer('Введите свой рост:')
-    await UserState.growth.set()
+    try:
+        await state.update_data(age=int(message.text))
+        await message.answer('Введите свой рост:')
+        await UserState.growth.set()
+    except ValueError:
+        await message.answer("Пожалуйста, используйте цифры.")
+        await UserState.age.set()
 
 
 @dp.message_handler(state=UserState.growth)
 async def set_weight(message, state):
-    await state.update_data(growth=int(message.text))
-    await message.answer('Введите свой вес:')
-    await UserState.weight.set()
+    try:
+        await state.update_data(growth=int(message.text))
+        await message.answer('Введите свой вес:')
+        await UserState.weight.set()
+    except ValueError:
+        await message.answer("Пожалуйста, используйте цифры.")
+        await UserState.growth.set()
 
 
 @dp.message_handler(state=UserState.weight)
 async def send_calories(message, state):
-    await state.update_data(weight=int(message.text))
-    data = await state.get_data()
-    norm = 10*data['weight']+6.5*data['growth']-5*data['age']-161
-    await message.answer(f'Оптимальное количество каллорий за день: {norm}')
-    await state.finish()
+    try:
+        await state.update_data(weight=int(message.text))
+        data = await state.get_data()
+        norm = 10*data['weight']+6.5*data['growth']-5*data['age']-161
+        await message.answer(f'Оптимальное количество каллорий за день: {norm}')
+        await state.finish()
+    except ValueError:
+        await message.answer("Пожалуйста, используйте цифры.")
+        await UserState.weight.set()
 
 
 @dp.message_handler()
