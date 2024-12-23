@@ -65,6 +65,9 @@ class RegistrationState(StatesGroup):
     balance = State(state=1000)
 
 
+initiate_db()
+
+
 @dp.message_handler(commands=['start'])
 async def start(message):
     await message.answer(f'Привет, {message.from_user.username}! Я бот помогающий твоему здоровью.', reply_markup=kb)
@@ -175,6 +178,7 @@ async def set_age(message, state):
     await state.update_data(age=int(message.text))
     user = await state.get_data()
     add_user(user['username'], user['email'], user['age'])
+    await message.answer('Регистрация прошла успешно!')
     await state.finish()
 
 
