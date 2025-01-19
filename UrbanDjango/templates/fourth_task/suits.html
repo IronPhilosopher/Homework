@@ -1,0 +1,17 @@
+{% extends 'menu.html' %}
+
+    {% block title %}
+    <title>Масти карт Таро</title>
+    {% endblock %}
+
+{% block pagename %}
+<h2>Масти карт таро</h2>
+{% endblock %}
+
+{% block content %}
+<ul>
+    {% for i in t_suits %}
+    <li> {{ i }} <button>Значение</button></li>
+    {% endfor %}
+</ul>
+{% endblock %}
